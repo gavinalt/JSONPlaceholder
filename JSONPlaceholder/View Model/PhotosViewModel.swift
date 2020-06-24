@@ -19,9 +19,9 @@ class PhotosViewModel {
 
   let albumId: Int
 
-  private let urlTranslator: DataTypeToURLTranslator
+  private let urlTranslator: DataTypeToWebURLTranslator
 
-  init(with albumId: Int, _ urlTranslator: DataTypeToURLTranslator = DataTypeToWebURLTranslator()) {
+  init(with albumId: Int, _ urlTranslator: DataTypeToWebURLTranslator = DataTypeToWebURLTranslator()) {
     self.urlTranslator = urlTranslator
     self.albumId = albumId
   }

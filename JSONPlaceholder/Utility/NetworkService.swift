@@ -47,30 +47,32 @@ final class NetworkService {
     var request = URLRequest(url: url)
     request.allHTTPHeaderFields = params
     let dataTask = URLSession.shared.dataTask(with: request) { (data, response, error) in
-//      guard let response = response as? HTTPURLResponse else {
-//        completion(.failure(.serverError))
-//        return
-//      }
-//
-//      guard 200 ..< 300 ~= response.statusCode else {
-//        completion(.failure(.invalidResponse(response.statusCode)))
-//        return
-//      }
+      guard let response = response as? HTTPURLResponse else {
+        completion(.failure(.serverError))
+        return
+      }
+
+      guard 200 ..< 300 ~= response.statusCode else {
+        completion(.failure(.invalidResponse(response.statusCode)))
+        return
+      }
 
       guard let data = data else {
         completion(.failure(.requestError(error)))
         return
       }
-
-      do {
-        let decoder = JSONDecoder()
-        let typedObject: T = try decoder.decode(T.self, from: data)
-        completion(.success(typedObject))
-      } catch let error {
-        completion(.failure(.parseError(error)))
-      }
+      self.parseJSON(type: type, data: data, completion: completion)
     }
-
     dataTask.resume()
+  }
+
+  func parseJSON<T: Decodable>(type: T.Type, data: Data, completion: @escaping (Result<T, NetworkError>) -> Void) {
+    do {
+      let decoder = JSONDecoder()
+      let typedObject: T = try decoder.decode(T.self, from: data)
+      completion(.success(typedObject))
+    } catch let error {
+      completion(.failure(.parseError(error)))
+    }
   }
 }

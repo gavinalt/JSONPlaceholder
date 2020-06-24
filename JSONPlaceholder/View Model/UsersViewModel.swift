@@ -22,9 +22,9 @@ class UsersViewModel {
     didSet { handler?() }
   }
 
-  private let urlTranslator: DataTypeToURLTranslator
+  private let urlTranslator: DataTypeToWebURLTranslator
 
-  init(_ urlTranslator: DataTypeToURLTranslator = DataTypeToWebURLTranslator()) {
+  init(_ urlTranslator: DataTypeToWebURLTranslator = DataTypeToWebURLTranslator()) {
     self.urlTranslator = urlTranslator
   }
 
@@ -45,7 +45,7 @@ class UsersViewModel {
         self.users = users
       case .failure(let error):
         print(error.localizedDescription)
-      }
+       }
     }
   }
 

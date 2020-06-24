@@ -10,10 +10,9 @@ import XCTest
 @testable import JSONPlaceholder
 
 class JSONPlaceholderTests: XCTestCase {
-  let urlTranslator: DataTypeToURLTranslator = DataTypeToMockURLTranslator()
-
+  
   func testUserViewModelFetchData() throws {
-    let usersViewModel = UsersViewModel(urlTranslator)
+    let usersViewModel = UsersViewModel()
     let expt = expectation(description: "Correctly fetched users")
     usersViewModel.bind {
       expt.fulfill()
@@ -27,7 +26,7 @@ class JSONPlaceholderTests: XCTestCase {
   }
 
   func testUserViewModelFilterData() throws {
-    let usersViewModel = UsersViewModel(urlTranslator)
+    let usersViewModel = UsersViewModel()
     let expt = expectation(description: "Correctly fetched users for filtering")
     usersViewModel.bind {
       expt.fulfill()
@@ -43,10 +42,10 @@ class JSONPlaceholderTests: XCTestCase {
   }
 
   func testAlbumsViewModelFetchData() throws {
-    let albumsViewModel = AlbumsViewModel(with: 0, urlTranslator)
+    let albumsViewModel = AlbumsViewModel(with: 0)
   }
 
   func testPhotosViewModelFetchData() throws {
-    let photosViewModel = PhotosViewModel(with: 0, urlTranslator)
+    let photosViewModel = PhotosViewModel(with: 0)
   }
 }
