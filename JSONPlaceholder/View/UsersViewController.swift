@@ -76,7 +76,6 @@ class UsersViewController: UIViewController {
     navigationItem.hidesSearchBarWhenScrolling = false
 
     definesPresentationContext = true
-    //    searchController.searchBar.scopeButtonTitles =
     searchController.searchBar.delegate = self
   }
 

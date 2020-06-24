@@ -9,17 +9,18 @@
 import Foundation
 
 class AlbumsViewModel {
-  private let networkService: NetworkServiceProtocol
-  private var handler: ViewModelHandler?
   let imageDownloader: ImageDownloader = ImageDownloader()
+
+  private let networkService: NetworkServiceProtocol
+  private let urlTranslator: DataTypeToURLTranslatorProtocol
+
+  private var handler: ViewModelHandler?
 
   private var albums: [Album] = [] {
     didSet { handler?() }
   }
 
   let userId: Int
-
-  private let urlTranslator: DataTypeToURLTranslatorProtocol
 
   init(with userId: Int,
        urlTranslator: DataTypeToURLTranslatorProtocol = DataTypeToURLTranslator(),

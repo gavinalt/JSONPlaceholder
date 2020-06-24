@@ -12,6 +12,8 @@ typealias ViewModelHandler = () -> Void
 
 class UsersViewModel {
   private let networkService: NetworkServiceProtocol
+  private let urlTranslator: DataTypeToURLTranslatorProtocol
+
   private var handler: ViewModelHandler?
 
   private var searchQuery: String = ""
@@ -21,8 +23,6 @@ class UsersViewModel {
   private var filteredUsers: [User] = [] {
     didSet { handler?() }
   }
-
-  private let urlTranslator: DataTypeToURLTranslatorProtocol
 
   init(urlTranslator: DataTypeToURLTranslatorProtocol = DataTypeToURLTranslator(),
        networkService: NetworkServiceProtocol = NetworkService()) {

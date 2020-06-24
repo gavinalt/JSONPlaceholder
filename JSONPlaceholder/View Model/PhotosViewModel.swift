@@ -11,6 +11,7 @@ import Foundation
 class PhotosViewModel {
   private let networkService: NetworkServiceProtocol
   private let imageDownloader: ImageDownloader
+
   private var handler: ViewModelHandler?
 
   private var photos: [Photo] = [] {
