@@ -11,6 +11,7 @@ import Foundation
 class AlbumsViewModel {
   private let networkService: NetworkServiceProtocol
   private var handler: ViewModelHandler?
+  let imageDownloader: ImageDownloader = ImageDownloader()
 
   private var albums: [Album] = [] {
     didSet { handler?() }

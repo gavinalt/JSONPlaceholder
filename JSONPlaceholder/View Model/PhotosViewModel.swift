@@ -10,7 +10,7 @@ import Foundation
 
 class PhotosViewModel {
   private let networkService: NetworkServiceProtocol
-  private let imageDownloader: ImageDownloader = ImageDownloader()
+  private let imageDownloader: ImageDownloader
   private var handler: ViewModelHandler?
 
   private var photos: [Photo] = [] {
@@ -22,9 +22,11 @@ class PhotosViewModel {
   private let urlTranslator: DataTypeToURLTranslatorProtocol
 
   init(with albumId: Int,
+       imageDownloader: ImageDownloader = ImageDownloader(),
        urlTranslator: DataTypeToURLTranslatorProtocol = DataTypeToURLTranslator(),
        networkService: NetworkServiceProtocol = NetworkService()) {
     self.albumId = albumId
+    self.imageDownloader = imageDownloader
     self.urlTranslator = urlTranslator
     self.networkService = networkService
   }

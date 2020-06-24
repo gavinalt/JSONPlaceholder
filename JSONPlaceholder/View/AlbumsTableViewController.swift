@@ -62,7 +62,7 @@ class AlbumsTableViewController: UITableViewController {
 
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let albumId = albumsViewModel.albumId(for: indexPath)
-    let photosViewModel = PhotosViewModel(with: albumId)
+    let photosViewModel = PhotosViewModel(with: albumId, imageDownloader: albumsViewModel.imageDownloader)
     let photosCollectionViewController = PhotosCollectionViewController(viewModel: photosViewModel)
     navigationController?.pushViewController(photosCollectionViewController, animated: true)
     tableView.deselectRow(at: indexPath, animated: false)

@@ -83,7 +83,11 @@ class JSONPlaceholderTests: XCTestCase {
     XCTAssertEqual(waitResult, .completed)
 
     XCTAssertEqual(usersViewModel.numOfRows(in: 0), 10)
+    XCTAssertEqual(usersViewModel.numOfSection, 1)
     XCTAssertEqual(usersViewModel.name(for: IndexPath(row: 3, section: 0)), "Patricia Lebsack")
+    XCTAssertEqual(usersViewModel.userName(for: IndexPath(row: 3, section: 0)), "Karianne")
+    XCTAssertEqual(usersViewModel.email(for: IndexPath(row: 3, section: 0)), "Julianne.OConner@kory.org")
+    XCTAssertEqual(usersViewModel.userId(for: IndexPath(row: 3, section: 0)), 4)
   }
 
   func testUsersViewModelFilterData() throws {
@@ -113,10 +117,14 @@ class JSONPlaceholderTests: XCTestCase {
     }
     albumsViewModel.fetchData()
     let waitResult = XCTWaiter.wait(for: [expt], timeout: 3)
+    albumsViewModel.unbind()
     XCTAssertEqual(waitResult, .completed)
 
     XCTAssertEqual(albumsViewModel.numOfRows(in: 0), 10)
+    XCTAssertEqual(albumsViewModel.numOfSection, 1)
     XCTAssertEqual(albumsViewModel.title(for: IndexPath(row: 3, section: 0)), "ducimus molestias eos animi atque nihil")
+    XCTAssertEqual(albumsViewModel.userId(for: IndexPath(row: 3, section: 0)), 2)
+    XCTAssertEqual(albumsViewModel.albumId(for: IndexPath(row: 3, section: 0)), 14)
   }
 
   func testPhotosViewModelFetchData() throws {
@@ -129,9 +137,14 @@ class JSONPlaceholderTests: XCTestCase {
     }
     photosViewModel.fetchData()
     let waitResult = XCTWaiter.wait(for: [expt], timeout: 3)
+    photosViewModel.unbind()
     XCTAssertEqual(waitResult, .completed)
 
     XCTAssertEqual(photosViewModel.numOfRows(in: 0), 50)
+    XCTAssertEqual(photosViewModel.numOfSection, 1)
     XCTAssertEqual(photosViewModel.title(for: IndexPath(row: 3, section: 0)), "necessitatibus et fuga similique ut vel")
+    XCTAssertEqual(photosViewModel.id(for: IndexPath(row: 3, section: 0)), 1304)
+    XCTAssertEqual(photosViewModel.url(for: IndexPath(row: 3, section: 0)), "https://via.placeholder.com/600/865668")
+    XCTAssertEqual(photosViewModel.thumbnailUrl(for: IndexPath(row: 3, section: 0)), "https://via.placeholder.com/150/865668")
   }
 }
