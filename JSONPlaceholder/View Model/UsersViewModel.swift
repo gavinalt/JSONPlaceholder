@@ -11,7 +11,7 @@ import Foundation
 typealias ViewModelHandler = () -> Void
 
 class UsersViewModel {
-  private let networkService: NetworkService = NetworkService()
+  private let networkService: NetworkServiceProtocol
   private var handler: ViewModelHandler?
 
   private var searchQuery: String = ""
@@ -22,10 +22,12 @@ class UsersViewModel {
     didSet { handler?() }
   }
 
-  private let urlTranslator: DataTypeToWebURLTranslator
+  private let urlTranslator: DataTypeToURLTranslatorProtocol
 
-  init(_ urlTranslator: DataTypeToWebURLTranslator = DataTypeToWebURLTranslator()) {
+  init(urlTranslator: DataTypeToURLTranslatorProtocol = DataTypeToURLTranslator(),
+       networkService: NetworkServiceProtocol = NetworkService()) {
     self.urlTranslator = urlTranslator
+    self.networkService = networkService
   }
 
   func bind(_ handler: @escaping ViewModelHandler) {

@@ -18,7 +18,18 @@ enum NetworkError: Error {
   case unknownError
 }
 
-final class NetworkService {
+protocol NetworkServiceProtocol {
+  func loadJSONData<T: Decodable>(type: T.Type,
+                                  url: String,
+                                  params: [String: String]?,
+                                  completion: @escaping (Result<T, NetworkError>) -> Void)
+  func loadJSONData<T: Decodable>(type: T.Type,
+                                  url: URL,
+                                  params: [String: String]?,
+                                  completion: @escaping (Result<T, NetworkError>) -> Void)
+}
+
+final class NetworkService: NetworkServiceProtocol {
   let urlSession: URLSession
 
   init() {

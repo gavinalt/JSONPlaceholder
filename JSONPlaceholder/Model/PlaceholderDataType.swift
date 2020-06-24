@@ -14,18 +14,22 @@ enum PlaceholderDataType {
   case photos(Int)
 }
 
-class DataTypeToWebURLTranslator {
+protocol DataTypeToURLTranslatorProtocol {
+  func url(for placeholderDataType: PlaceholderDataType) -> URL
+}
+
+class DataTypeToURLTranslator: DataTypeToURLTranslatorProtocol {
   static let rootUrl = "https://jsonplaceholder.typicode.com/"
 
   func url(for placeholderDataType: PlaceholderDataType) -> URL {
     let urlString: String
     switch placeholderDataType {
     case .users:
-      urlString = DataTypeToWebURLTranslator.rootUrl + "users/"
+      urlString = DataTypeToURLTranslator.rootUrl + "users/"
     case let .albums(userId):
-      urlString = DataTypeToWebURLTranslator.rootUrl + "users/\(userId)/albums"
+      urlString = DataTypeToURLTranslator.rootUrl + "users/\(userId)/albums"
     case let .photos(albumId):
-      urlString = DataTypeToWebURLTranslator.rootUrl + "albums/\(albumId)/photos"
+      urlString = DataTypeToURLTranslator.rootUrl + "albums/\(albumId)/photos"
     }
     guard let url = URL(string: urlString) else {
       fatalError("Invalid URL")

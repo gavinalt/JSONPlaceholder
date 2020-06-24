@@ -9,7 +9,7 @@
 import Foundation
 
 class PhotosViewModel {
-  private let networkService: NetworkService = NetworkService()
+  private let networkService: NetworkServiceProtocol
   private let imageDownloader: ImageDownloader = ImageDownloader()
   private var handler: ViewModelHandler?
 
@@ -19,11 +19,14 @@ class PhotosViewModel {
 
   let albumId: Int
 
-  private let urlTranslator: DataTypeToWebURLTranslator
+  private let urlTranslator: DataTypeToURLTranslatorProtocol
 
-  init(with albumId: Int, _ urlTranslator: DataTypeToWebURLTranslator = DataTypeToWebURLTranslator()) {
-    self.urlTranslator = urlTranslator
+  init(with albumId: Int,
+       urlTranslator: DataTypeToURLTranslatorProtocol = DataTypeToURLTranslator(),
+       networkService: NetworkServiceProtocol = NetworkService()) {
     self.albumId = albumId
+    self.urlTranslator = urlTranslator
+    self.networkService = networkService
   }
 
   func bind(_ handler: @escaping ViewModelHandler) {

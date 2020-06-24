@@ -9,7 +9,7 @@
 import Foundation
 
 class AlbumsViewModel {
-  private let networkService: NetworkService = NetworkService()
+  private let networkService: NetworkServiceProtocol
   private var handler: ViewModelHandler?
 
   private var albums: [Album] = [] {
@@ -18,11 +18,14 @@ class AlbumsViewModel {
 
   let userId: Int
 
-  private let urlTranslator: DataTypeToWebURLTranslator
+  private let urlTranslator: DataTypeToURLTranslatorProtocol
 
-  init(with userId: Int, _ urlTranslator: DataTypeToWebURLTranslator = DataTypeToWebURLTranslator()) {
-    self.urlTranslator = urlTranslator
+  init(with userId: Int,
+       urlTranslator: DataTypeToURLTranslatorProtocol = DataTypeToURLTranslator(),
+       networkService: NetworkServiceProtocol = NetworkService()) {
     self.userId = userId
+    self.urlTranslator = urlTranslator
+    self.networkService = networkService
   }
 
   func bind(_ handler: @escaping ViewModelHandler) {
