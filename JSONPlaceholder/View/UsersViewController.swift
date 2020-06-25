@@ -68,14 +68,21 @@ class UsersViewController: UIViewController {
     resultIndicator.translatesAutoresizingMaskIntoConstraints = false
     resultIndicator.backgroundColor = .secondarySystemBackground
     resultCountLabel.fill(in: resultIndicator)
-    tableView.tableHeaderView = resultIndicator
+  }
 
-    NSLayoutConstraint.activate([
-      resultIndicatorHeight,
-      resultIndicator.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-      resultIndicator.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-      resultIndicator.widthAnchor.constraint(equalTo: tableView.widthAnchor)
-    ])
+  private func tableHeaderShouldShow(bool: Bool) {
+    if bool {
+      tableView.tableHeaderView = resultIndicator
+
+      NSLayoutConstraint.activate([
+        resultIndicatorHeight,
+        resultIndicator.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+        resultIndicator.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+        resultIndicator.widthAnchor.constraint(equalTo: tableView.widthAnchor)
+      ])
+    } else {
+      tableView.tableHeaderView = nil
+    }
   }
 
   private func setupTableView() {
@@ -140,7 +147,7 @@ extension UsersViewController: UISearchBarDelegate {
 
 extension UsersViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
-    resultIndicatorHeight.constant = isSearchBarEmpty ? 0 : 32
+    tableHeaderShouldShow(bool: !isSearchBarEmpty)
     usersViewModel.filterDataForSearchQuery(searchController.searchBar.text!)
   }
 }
