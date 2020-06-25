@@ -15,6 +15,9 @@ class UsersViewController: UIViewController {
 
   private let searchController: UISearchController
   private let tableView: UITableView
+  private let resultIndicator: UIView
+  private let resultCountLabel: UILabel
+  private let resultIndicatorHeight: NSLayoutConstraint
 
   var isSearchBarEmpty: Bool {
     return searchController.searchBar.text?.isEmpty ?? true
@@ -26,10 +29,18 @@ class UsersViewController: UIViewController {
     usersViewModel = viewModel
     searchController = UISearchController(searchResultsController: nil)
     tableView = UITableView()
+    resultIndicator = UIView()
+    resultCountLabel = UILabel()
+    resultIndicatorHeight = resultIndicator.heightAnchor.constraint(equalToConstant: 32)
     super.init(nibName: nil, bundle: nil)
     usersViewModel.bind {
-      DispatchQueue.main.async {
-        self.tableView.reloadData()
+      DispatchQueue.main.async { [weak self] in
+        self?.tableView.reloadData()
+        if viewModel.numOfRows(in: 0) == 0 {
+          self?.resultCountLabel.text = "No Result"
+        } else {
+          self?.resultCountLabel.text = "Result: \(viewModel.numOfRows(in: 0))"
+        }
       }
     }
   }
@@ -53,6 +64,20 @@ class UsersViewController: UIViewController {
     usersViewModel.fetchData()
   }
 
+  private func setupTableHeader() {
+    resultIndicator.translatesAutoresizingMaskIntoConstraints = false
+    resultIndicator.backgroundColor = .secondarySystemBackground
+    resultCountLabel.fill(in: resultIndicator)
+    tableView.tableHeaderView = resultIndicator
+
+    NSLayoutConstraint.activate([
+      resultIndicatorHeight,
+      resultIndicator.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+      resultIndicator.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+      resultIndicator.widthAnchor.constraint(equalTo: tableView.widthAnchor)
+    ])
+  }
+
   private func setupTableView() {
     tableView.translatesAutoresizingMaskIntoConstraints = false
     tableView.estimatedRowHeight = 32
@@ -63,6 +88,8 @@ class UsersViewController: UIViewController {
     tableView.delegate = self
     view.addSubview(tableView)
     tableView.fill(in: view)
+
+    setupTableHeader()
   }
 
   private func setupSearchController() {
@@ -107,12 +134,13 @@ extension UsersViewController: UITableViewDelegate {
 
 extension UsersViewController: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-    updateSearchResults(for: searchController)
+//    updateSearchResults(for: searchController)
   }
 }
 
 extension UsersViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
+    resultIndicatorHeight.constant = isSearchBarEmpty ? 0 : 32
     usersViewModel.filterDataForSearchQuery(searchController.searchBar.text!)
   }
 }
