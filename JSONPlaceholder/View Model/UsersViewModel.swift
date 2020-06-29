@@ -51,17 +51,32 @@ class UsersViewModel {
     }
   }
 
-  func filterDataForSearchQuery(_ query: String) {
+  func filterDataForSearchQuery(_ query: String, category: SearchCategory? = nil) {
     let whitespaceCharacterSet = CharacterSet.whitespaces
     let strippedString = query.trimmingCharacters(in: whitespaceCharacterSet)
     searchQuery = strippedString
     if strippedString == "" {
       filteredUsers = users
     } else {
-      filteredUsers = users.filter {
-        $0.name.range(of: strippedString, options: .caseInsensitive) != nil ||
-        $0.userName.range(of: strippedString, options: .caseInsensitive) != nil ||
-        $0.email.range(of: strippedString, options: .caseInsensitive) != nil
+      switch category {
+      case .name:
+        filteredUsers = users.filter {
+          $0.name.range(of: strippedString, options: .caseInsensitive) != nil
+        }
+      case .userName:
+        filteredUsers = users.filter {
+            $0.userName.range(of: strippedString, options: .caseInsensitive) != nil
+        }
+      case .email:
+        filteredUsers = users.filter {
+            $0.email.range(of: strippedString, options: .caseInsensitive) != nil
+        }
+      case .all, nil:
+        filteredUsers = users.filter {
+          $0.name.range(of: strippedString, options: .caseInsensitive) != nil ||
+            $0.userName.range(of: strippedString, options: .caseInsensitive) != nil ||
+            $0.email.range(of: strippedString, options: .caseInsensitive) != nil
+        }
       }
     }
   }

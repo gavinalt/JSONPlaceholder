@@ -18,11 +18,16 @@ class UsersViewController: UIViewController {
   private let resultIndicator: UIView
   private let resultCountLabel: UILabel
 
+  let usersViewModel: UsersViewModel
+
   var isSearchBarEmpty: Bool {
     return searchController.searchBar.text?.isEmpty ?? true
   }
 
-  let usersViewModel: UsersViewModel
+  var isFiltering: Bool {
+    let searchScopeInUse = searchController.searchBar.selectedScopeButtonIndex != 0
+    return searchController.isActive && (!isSearchBarEmpty || searchScopeInUse)
+  }
 
   init(viewModel: UsersViewModel) {
     usersViewModel = viewModel
@@ -88,6 +93,7 @@ class UsersViewController: UIViewController {
     searchController.obscuresBackgroundDuringPresentation = false
     searchController.searchBar.autocapitalizationType = .none
     searchController.searchBar.placeholder = searchFieldPlaceHolder
+    searchController.searchBar.scopeButtonTitles = SearchCategory.allCases.map { $0.rawValue }
 
     navigationItem.searchController = searchController
     navigationItem.hidesSearchBarWhenScrolling = false
@@ -124,14 +130,17 @@ extension UsersViewController: UITableViewDelegate {
 
 extension UsersViewController: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-//    updateSearchResults(for: searchController)
+    let category = SearchCategory(rawValue: searchController.searchBar.scopeButtonTitles![selectedScope])
+    usersViewModel.filterDataForSearchQuery(searchController.searchBar.text!, category: category)
   }
 }
 
 extension UsersViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
     tableView.tableHeaderView = isSearchBarEmpty ? nil : resultIndicator
-    usersViewModel.filterDataForSearchQuery(searchController.searchBar.text!)
+    let category = SearchCategory(rawValue:
+      searchController.searchBar.scopeButtonTitles![searchController.searchBar.selectedScopeButtonIndex])
+    usersViewModel.filterDataForSearchQuery(searchController.searchBar.text!, category: category)
   }
 }
 
