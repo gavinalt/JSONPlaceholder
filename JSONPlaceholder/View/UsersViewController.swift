@@ -17,7 +17,6 @@ class UsersViewController: UIViewController {
   private let tableView: UITableView
   private let resultIndicator: UIView
   private let resultCountLabel: UILabel
-  private let resultIndicatorHeight: NSLayoutConstraint
 
   var isSearchBarEmpty: Bool {
     return searchController.searchBar.text?.isEmpty ?? true
@@ -31,15 +30,14 @@ class UsersViewController: UIViewController {
     tableView = UITableView()
     resultIndicator = UIView()
     resultCountLabel = UILabel()
-    resultIndicatorHeight = resultIndicator.heightAnchor.constraint(equalToConstant: 32)
     super.init(nibName: nil, bundle: nil)
     usersViewModel.bind {
       DispatchQueue.main.async { [weak self] in
         self?.tableView.reloadData()
         if viewModel.numOfRows(in: 0) == 0 {
-          self?.resultCountLabel.text = "No Result"
+          self?.resultCountLabel.text = "No Results"
         } else {
-          self?.resultCountLabel.text = "Result: \(viewModel.numOfRows(in: 0))"
+          self?.resultCountLabel.text = "\(viewModel.numOfRows(in: 0)) Results"
         }
       }
     }
@@ -58,6 +56,7 @@ class UsersViewController: UIViewController {
 
     title = appTitle
     view.backgroundColor = .systemBackground
+    resultIndicator.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 32)
     setupTableView()
     setupSearchController()
 
@@ -65,24 +64,8 @@ class UsersViewController: UIViewController {
   }
 
   private func setupTableHeader() {
-    resultIndicator.translatesAutoresizingMaskIntoConstraints = false
     resultIndicator.backgroundColor = .secondarySystemBackground
-    resultCountLabel.fill(in: resultIndicator)
-  }
-
-  private func tableHeaderShouldShow(bool: Bool) {
-    if bool {
-      tableView.tableHeaderView = resultIndicator
-
-      NSLayoutConstraint.activate([
-        resultIndicatorHeight,
-        resultIndicator.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-        resultIndicator.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-        resultIndicator.widthAnchor.constraint(equalTo: tableView.widthAnchor)
-      ])
-    } else {
-      tableView.tableHeaderView = nil
-    }
+    resultCountLabel.fill(in: resultIndicator, leadingMargin: 8)
   }
 
   private func setupTableView() {
@@ -147,7 +130,7 @@ extension UsersViewController: UISearchBarDelegate {
 
 extension UsersViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
-    tableHeaderShouldShow(bool: !isSearchBarEmpty)
+    tableView.tableHeaderView = isSearchBarEmpty ? nil : resultIndicator
     usersViewModel.filterDataForSearchQuery(searchController.searchBar.text!)
   }
 }
