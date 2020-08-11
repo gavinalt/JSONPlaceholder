@@ -1,0 +1,5 @@
+language: objective-c
+osx_image: xcode12
+xcode_project: JSONPlaceholder.xcodeproj
+xcode_scheme: JSONPlaceholder
+xcode_destination: platform=iOS Simulator,OS=13.5,name=iPhone 11

@@ -1,5 +1,7 @@
 # JSONPlaceholder
 
+[![Build Status](https://travis-ci.org/gavinalt/JSONPlaceholder.svg?branch=travis-ci)](https://travis-ci.org/gavinalt/JSONPlaceholder)
+
 A Simple iOS App with Unit Tests that Demonstrates JSON Parsing and MVVM Pattern.
 
 ## Table of Contents:
